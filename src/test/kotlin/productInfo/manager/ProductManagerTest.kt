@@ -66,12 +66,12 @@ class ProductManagerTest{
         assertEquals("Product 1", displayProducts[0].name)
         assertEquals(10.0, displayProducts[0].price)
         assertEquals(130, displayProducts[0].inventory)
-        assertEquals("image1.jpg", displayProducts[0].imageUrl)
+        assertEquals("image1.jpg", displayProducts[0].image)
         assertEquals("sku2", displayProducts[1].sku)
         assertEquals("Product 2", displayProducts[1].name)
         assertEquals(30.0, displayProducts[1].price)
         assertEquals(30, displayProducts[1].inventory)
-        assertEquals("image2.jpg", displayProducts[1].imageUrl)
+        assertEquals("image2.jpg", displayProducts[1].image)
     }
 
 

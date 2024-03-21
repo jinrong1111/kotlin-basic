@@ -1,7 +1,9 @@
 package productInfo.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Inventory(
-    val sku: String,
+    @SerializedName("SKU") val sku: String,
     val region: String,
     val quantity: Int
 )

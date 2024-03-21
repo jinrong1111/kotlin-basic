@@ -1,19 +1,34 @@
-import com.thoughtworks.kotlin_basic.util.PrintUtil
+import kotlinx.coroutines.runBlocking
+import productInfo.manager.ProductManager
+import productInfo.repository.InventoryRepository
+import productInfo.repository.ProductRepository
+import productInfo.service.InventoryService
+import productInfo.service.ProductService
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-fun main(args: Array<String>) {
-    println("Hello World!")
-    println("Program arguments: ${args.joinToString()}")
+fun main() {
+    try {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://localhost:3000/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-    val printUtil = PrintUtil()
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
+        val productService = retrofit.create(ProductService::class.java)
+        val inventoryService = retrofit.create(InventoryService::class.java)
 
-    val headers = listOf("ID", "Name", "Occupation")
-    val rows = listOf(
-        listOf("1", "Alice", "Software Engineer"),
-        listOf("2", "Bob", "Data Scientist"),
-        listOf("3", "Charlie", "Product Manager")
-    )
+        val productRepository = ProductRepository(productService)
+        val inventoryRepository = InventoryRepository(inventoryService)
 
-    printUtil.printTable(headers, rows)
+        val productManager = ProductManager(productRepository, inventoryRepository)
+
+        runBlocking {
+            val displayProducts = productManager.displayAllProducts()
+            displayProducts.forEach { displayProduct ->
+                println("SKU: ${displayProduct.sku}, Name: ${displayProduct.name}, Price: ${displayProduct.price}, Inventory: ${displayProduct.inventory}, Image: ${displayProduct.image}")
+            }
+        }
+    } catch (e: Exception) {
+        println("An error occurred: ${e.message}")
+    }
 }

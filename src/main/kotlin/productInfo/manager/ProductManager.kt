@@ -34,7 +34,7 @@ class ProductManager(
         return products.map { product ->
             val totalQuantity = calculateTotalQuantity(product.sku, inventories)
             val price = calculatePrice(product.type, totalQuantity, product.price)
-            DisplayProduct(product.sku, product.name, price, totalQuantity, product.imageUrl)
+            DisplayProduct(product.sku, product.name, price, totalQuantity, product.image)
         }
     }
 
