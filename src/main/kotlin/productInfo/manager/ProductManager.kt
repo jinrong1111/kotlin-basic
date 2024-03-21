@@ -1,5 +1,6 @@
 package productInfo.manager
 
+import productInfo.model.DisplayProduct
 import productInfo.model.Inventory
 import productInfo.model.ProductType
 import productInfo.repository.InventoryRepository
@@ -23,6 +24,17 @@ class ProductManager(
                     else -> originalPrice * 1.5
                 }
             }
+        }
+    }
+
+    suspend fun displayAllProducts(): List<DisplayProduct> {
+        val products = productRepository.getProducts()
+        val inventories = inventoryRepository.getInventories()
+
+        return products.map { product ->
+            val totalQuantity = calculateTotalQuantity(product.sku, inventories)
+            val price = calculatePrice(product.type, totalQuantity, product.price)
+            DisplayProduct(product.sku, product.name, price, totalQuantity, product.imageUrl)
         }
     }
 
